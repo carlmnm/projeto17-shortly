@@ -81,6 +81,7 @@ export async function deleteUrl (req, res) {
     try{
         await db.query(`DELETE FROM shortys WHERE id = $1;`, [id])
         await db.query(`DELETE FROM urls WHERE ID = $1;`, [myUrl.rows[0].url_id])
+        res.sendStatus(204)
     } catch (error) {
         res.send(error)
     }
