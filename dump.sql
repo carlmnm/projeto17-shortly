@@ -60,7 +60,7 @@ ALTER SEQUENCE public.shortys_id_seq OWNED BY public.shortys.id;
 
 CREATE TABLE public.tokens (
     id integer NOT NULL,
-    user_id integer,
+    "userId" integer,
     token text NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -289,11 +289,11 @@ ALTER TABLE ONLY public.shortys
 
 
 --
--- Name: tokens tokens_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tokens tokens_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tokens
-    ADD CONSTRAINT tokens_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT "tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
 --
