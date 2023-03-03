@@ -25,7 +25,7 @@ export async function postSignin(req, res) {
     const user = await db.query(`SELECT * FROM users WHERE email = $1;`, [email])
 
     if (user.rowCount === 0 || user.rows[0].senha !== password) {
-        return res.sendstatus(401)
+        return res.sendStatus(401)
     }
 
     try {
