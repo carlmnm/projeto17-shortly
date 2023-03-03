@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import usersRouters from "./routers/usersRouters.js"
-import shortenRouters from "./routers/shortenRouters"
+import shortenRouters from "./routers/shortenRouters.js"
 
 //import routers from "./routers/index.routers.js";
 
