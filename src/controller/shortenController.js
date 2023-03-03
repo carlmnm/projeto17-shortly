@@ -59,7 +59,7 @@ export async function openShort (req, res) {
 
         let myViews = number(originalUrl.rows[0].views) + 1
         await db.query(`UPDATE urls SET views = $1 WHERE id = $2;`, [myViews, originalUrl.rows[0].id])
-        res.redirect(originalUrl.rows[0].url)
+        res.redirect(302, originalUrl.rows[0].url)
     } catch {
 
     }
