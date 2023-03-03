@@ -25,14 +25,14 @@ export async function postSignin (req, res) {
     const user = await db.query(`SELECT * FROM users WHERE email = $1;`, [email])
 
     if (user.rowCount === 0 || user.rows[0].senha !== password) {
-        return res.sendStatus(401)
+        return res.sendstatus(401)
     }
 
     try {
         const token = uuid()
         await db.query(`INSERT INTO tokens (user_id, token)
         VALUES ($1, $2);`, [user.rows[0].id, token])
-        res.sendStatus(200)
+        res.send({token: token}).status(200)
     } catch (error) {
         res.send(error)
     }
