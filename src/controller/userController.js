@@ -30,10 +30,9 @@ export async function postSignin (req, res) {
 
     try {
         const token = uuid()
-        const myToken = {token: token}
         await db.query(`INSERT INTO tokens (user_id, token)
         VALUES ($1, $2);`, [user.rows[0].id, token])
-        res.send(myToken).status(200)
+        res.send(token).status(200)
     } catch (error) {
         res.send(error)
     }
