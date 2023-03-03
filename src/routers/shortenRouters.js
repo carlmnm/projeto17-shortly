@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { shortenUrl } from "../controller/shortenController.js";
 import { validateUsersSchema } from "../middleware/postUserMiddleware.js";
-import  shortenSchema from "../schemas/signupSchema.js"
+import  shortenSchema from "../schemas/shortenSchema.js"
 
 const router = Router()
 
