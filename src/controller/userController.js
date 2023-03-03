@@ -76,3 +76,22 @@ export async function showUserData(req, res) {
     }
 
 }
+
+export async function showRank(req, res) {
+    try {
+        const rankMaker = await db.query(`
+        SELECT users.id, users.nome,
+        COUNT(shortys.shorted_url) AS "linksCount", 
+        SUM(shortys.views) AS "visitCount"
+        JOIN users ON urls.user_id = users.id
+        FROM shortys
+        JOIN urls ON urls.user_id = users.id
+        GROUP BY users.id
+        ORDER BY "visitCount" DESC
+        LIMIT 10
+        `);
+        res.status(200).send(rankMaker)
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
