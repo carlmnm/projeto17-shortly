@@ -52,15 +52,20 @@ export async function getUrlById(req, res) {
 }
 
 export async function openShort (req, res) {
-    const {shortUrl} = req.params
+    const short = req.params.shortUrl
     try{
-        const originalUrl = await db.query(`SELECT * FROM shortys WHERE shorted_url = $1;`, [shortUrl])
-        if (originalUrl.rowCount === 0) return res.sendStatus(404)
+        const shortExists = await db.query(`SELECT * FROM shortys WHERE shorted_url = $1;`, [short])
+        if (shortExists.rowCount === 0) return res.sendStatus(404)
 
-        let myViews = number(originalUrl.rows[0].views) + 1
-        await db.query(`UPDATE urls SET views = $1 WHERE id = $2;`, [myViews, originalUrl.rows[0].id])
+        const originalUrl = await db.query(`SELECT * FROM urls WHERE id = $1;`, [shortExists.rows[0].url_id])
+
+        let myViews = Number(shortExists.rows[0].views) + 1
+        await db.query(`UPDATE shortys SET views = $1 WHERE id = $2;`, [myViews, shortExists.rows[0].id])
+
+        console.log(originalUrl.rows[0].url)
         res.redirect(302, originalUrl.rows[0].url)
-    } catch {
-
+        //res.sendStatus(399)
+    } catch (error){
+        console.log(error)
     }
 }
