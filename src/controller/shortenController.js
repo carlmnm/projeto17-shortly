@@ -76,6 +76,7 @@ export async function deleteUrl (req, res) {
 
     const userIsLoged = await db.query(`SELECT * FROM tokens WHERE token = $1;`, [token])
     const myUrl = await db.query(`SELECT * FROM shortys WHERE id = $1;`, [id])
+    if (myUrl.rowCount === 0) return res.sendStatus(404)
     if (!token || userIsLoged.rowCount === 0 || userIsLoged.rows[0].userId !== myUrl.rows[0].user_id) return res.sendStatus(401)
 
     try{
