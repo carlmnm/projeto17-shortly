@@ -64,8 +64,24 @@ export async function openShort (req, res) {
 
         console.log(originalUrl.rows[0].url)
         res.redirect(302, originalUrl.rows[0].url)
-        //res.sendStatus(399)
     } catch (error){
         console.log(error)
+    }
+}
+
+export async function deleteUrl (req, res) {
+    const { id } = req.params
+    const { authorization } = req.headers
+    const token = authorization?.replace('Bearer ', '')
+
+    const userIsLoged = await db.query(`SELECT * FROM tokens WHERE token = $1;`, [token])
+    const myUrl = await db.query(`SELECT * FROM shortys WHERE id = $1;`, [id])
+    if (!token || userIsLoged.rowCount === 0 || userIsLoged.rows[0].userId !== myUrl.rows[0].user_id) return res.sendStatus(401)
+
+    try{
+        await db.query(`DELETE FROM shortys WHERE id = $1;`, [id])
+        await db.query(`DELETE FROM urls WHERE ID = $1;`, [myUrl.rows[0].url_id])
+    } catch (error) {
+        res.send(error)
     }
 }
