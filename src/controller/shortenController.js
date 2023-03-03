@@ -25,10 +25,27 @@ export async function shortenUrl(req, res) {
 
         await db.query(`INSERT INTO shortys (user_id, url_id, shorted_url)
         VALUES ($1, $2, $3);`, [userIsLoged.rows[0].userId, myUrl.rows[0].id, shortLink])
-        
+
         console.log("oi")
         //const response = { id: myUrl.id, shortUrl: shortLink }
         return res.status(201).send({ id: myUrl.rows[0].id, shortUrl: shortLink })
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+export async function getUrlById(req, res) {
+    const { id } = req.params
+
+    try {
+        const shortedUrl = await db.query(`SELECT * FROM shortys WHERE id = $1;`, [id])
+        
+        if (shortedUrl.rowCount === 0) return res.sendStatus(404)
+
+        const originalUrl = await db.query(`SELECT * FROM urls WHERE id = $1;`, [shortedUrl.rows[0].url_id])
+
+        res.status(200).send({id: id, shortUrl: shortedUrl.rows[0].shorted_url, url: originalUrl.rows[0].url})
+
     } catch (error) {
         res.send(error)
     }
