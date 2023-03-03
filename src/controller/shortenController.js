@@ -9,7 +9,7 @@ export async function shortenUrl(req, res) {
 
     const userIsLoged = await db.query(`SELECT * FROM tokens WHERE token = $1;`, [token])
     //const userIsLoged = await db.query(`SELECT * FROM tokens `)
-    if (!token || !userIsLoged) return res.sendStatus(401)
+    if (!token || userIsLoged.rowCount === 0) return res.sendStatus(401)
 
     const { url } = req.body
     const shortLink = nanoid(8)
