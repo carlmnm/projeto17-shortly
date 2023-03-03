@@ -39,7 +39,7 @@ export async function getUrlById(req, res) {
 
     try {
         const shortedUrl = await db.query(`SELECT * FROM shortys WHERE id = $1;`, [id])
-        
+
         if (shortedUrl.rowCount === 0) return res.sendStatus(404)
 
         const originalUrl = await db.query(`SELECT * FROM urls WHERE id = $1;`, [shortedUrl.rows[0].url_id])
@@ -48,5 +48,19 @@ export async function getUrlById(req, res) {
 
     } catch (error) {
         res.send(error)
+    }
+}
+
+export async function openShort (req, res) {
+    const {shortUrl} = req.params
+    try{
+        const originalUrl = await db.query(`SELECT * FROM shortys WHERE shorted_url = $1;`, [shortUrl])
+        if (originalUrl.rowCount === 0) return res.sendStatus(404)
+
+        let myViews = number(originalUrl.rows[0].views) + 1
+        await db.query(`UPDATE urls SET views = $1 WHERE id = $2;`, [myViews, originalUrl.rows[0].id])
+        res.redirect(originalUrl.rows[0].url)
+    } catch {
+
     }
 }
